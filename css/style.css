@@ -1,0 +1,224 @@
+:root {
+  --bg: #f4f4f1;
+  --surface: #fbfbf9;
+  --fg: #3d3d3d;
+  --muted: #8a8a85;
+  --border: #d4d4ce;
+  --x: #d9534f;
+  --o: #2f7fc1;
+  --win: rgba(70, 160, 90, 0.18);
+  --cursor: #3d3d3d;
+  --overlay: rgba(251, 251, 249, 0.97);
+  --accent: #3d3d3d;
+  --accent-fg: #fbfbf9;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17181a;
+    --surface: #1f2124;
+    --fg: #e4e4e0;
+    --muted: #8d8f93;
+    --border: #35383d;
+    --x: #ef7b77;
+    --o: #6bb0e8;
+    --win: rgba(110, 200, 130, 0.22);
+    --cursor: #e4e4e0;
+    --overlay: rgba(31, 33, 36, 0.97);
+    --accent: #e4e4e0;
+    --accent-fg: #17181a;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.game {
+  width: min(100% - 32px, 420px);
+  padding: 24px 0;
+  text-align: center;
+}
+
+.game__title {
+  margin: 0 0 16px;
+  font-size: 1.1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* ---------- scoreboard ---------- */
+.scoreboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.score {
+  padding: 8px 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.score__label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.score strong { font-size: 1.5rem; }
+.score--x strong { color: var(--x); }
+.score--o strong { color: var(--o); }
+
+.status {
+  margin: 0 0 12px;
+  min-height: 1.5em;
+  font-weight: 600;
+}
+
+.status .mark-x { color: var(--x); }
+.status .mark-o { color: var(--o); }
+
+/* ---------- board ---------- */
+.stage {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 8px;
+  background: var(--border);
+  border-radius: 10px;
+  user-select: none;
+}
+
+.cell {
+  position: relative;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cell--filled { cursor: default; }
+.cell--cursor { outline: 3px solid var(--cursor); outline-offset: -3px; }
+.cell--win { background: var(--win); }
+
+.cell--rejected { animation: shake 0.25s; }
+
+@keyframes shake {
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.cell svg {
+  width: 62%;
+  height: 62%;
+  fill: none;
+  stroke-width: 9;
+  stroke-linecap: round;
+  overflow: visible;
+}
+
+.cell svg .stroke {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: draw 0.25s ease-out forwards;
+}
+
+.cell svg .stroke:nth-child(2) { animation-delay: 0.12s; }
+
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+.mark--x { stroke: var(--x); }
+.mark--o { stroke: var(--o); }
+
+/* ---------- game over ---------- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--overlay);
+}
+
+.overlay[hidden] { display: none; }
+
+.overlay__label {
+  margin: 0;
+  font-size: clamp(1.4rem, 7vw, 2rem);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.overlay__result { margin: 0 0 6px; font-size: 1.1rem; }
+.overlay__hint { margin: 0; font-size: 0.75rem; color: var(--muted); }
+
+.btn {
+  padding: 10px 28px;
+  font: inherit;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-fg);
+  background: var(--accent);
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn:hover { opacity: 0.88; }
+.btn:focus-visible { outline: 3px solid var(--muted); outline-offset: 3px; }
+
+/* ---------- footer ---------- */
+.hint {
+  margin: 14px 0 6px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.9;
+}
+
+kbd {
+  padding: 1px 6px;
+  font: inherit;
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.link-btn {
+  padding: 4px;
+  font: inherit;
+  font-size: 0.75rem;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}

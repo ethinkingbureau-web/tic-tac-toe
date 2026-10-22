@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tic Tac Toe</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="game">
+    <h1 class="game__title">Tic Tac Toe</h1>
+
+    <section class="scoreboard" aria-label="Score">
+      <div class="score score--x"><span class="score__label">X</span><strong id="score-x">0</strong></div>
+      <div class="score score--draw"><span class="score__label">Draws</span><strong id="score-draw">0</strong></div>
+      <div class="score score--o"><span class="score__label">O</span><strong id="score-o">0</strong></div>
+    </section>
+
+    <p id="status" class="status" aria-live="polite"></p>
+
+    <div class="stage">
+      <div id="board" class="board" role="grid" aria-label="Tic tac toe board"></div>
+
+      <div id="game-over" class="overlay" role="dialog" aria-labelledby="game-over-title" hidden>
+        <h2 class="overlay__label">Game Over</h2>
+        <p id="game-over-title" class="overlay__result">X wins!</p>
+        <button id="restart-btn" class="btn" type="button">Restart</button>
+        <p class="overlay__hint">or press Space / &uarr; / Enter</p>
+      </div>
+    </div>
+
+    <p class="hint">
+      <kbd>&larr;</kbd> <kbd>&rarr;</kbd> <kbd>&darr;</kbd> move &nbsp;&middot;&nbsp;
+      <kbd>Space</kbd> / <kbd>&uarr;</kbd> place your mark &nbsp;&middot;&nbsp; or click a square
+    </p>
+    <button id="reset-scores-btn" class="link-btn" type="button">Reset scores</button>
+  </main>
+
+  <!-- Plain scripts (not ES modules) so the game also works when opened via file:// -->
+  <script src="js/config.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/scoreboard.js"></script>
+  <script src="js/input.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
