@@ -64,6 +64,12 @@
       });
     }
 
+    /** Viewport coordinates of a square's centre. */
+    getCellCenter(index) {
+      const r = this.cellEls[index].getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    }
+
     rejectCell(index) {
       const el = this.cellEls[index];
       el.classList.remove('cell--rejected');

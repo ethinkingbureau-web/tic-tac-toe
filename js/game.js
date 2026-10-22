@@ -13,7 +13,12 @@
   const other = (mark) => (mark === X ? O : X);
 
   class Game {
-    constructor(els) {
+    /**
+     * @param {object} els DOM references (see UI)
+     * @param {{burst:function(number, number):void}} [fireworks] optional effects module
+     */
+    constructor(els, fireworks) {
+      this.fireworks = fireworks || null;
       this.board = new Board();
       this.scoreboard = new Scoreboard();
       this.input = new Input();
@@ -49,12 +54,13 @@
 
     /* ------------------------------ actions ------------------------------ */
 
+    /** @returns {boolean} true if a mark was placed */
     place(index) {
-      if (this.state !== STATE.PLAYING) return;
+      if (this.state !== STATE.PLAYING) return false;
 
       if (!this.board.place(index, this.current)) {
         this.ui.rejectCell(index); // square already taken
-        return;
+        return false;
       }
 
       this.result = this.board.getResult();
@@ -64,6 +70,7 @@
         this.current = other(this.current);
       }
       this._render();
+      return true;
     }
 
     restart() {
@@ -107,7 +114,11 @@
         this._render();
         return;
       }
-      this.place(this.cursor);
+      // Mouse clicks already launch a firework (see Fireworks.attach); keyboard placements get one here.
+      if (this.place(this.cursor) && this.fireworks) {
+        const { x, y } = this.ui.getCellCenter(this.cursor);
+        this.fireworks.burst(x, y);
+      }
     }
 
     _handleCellClick(index) {
